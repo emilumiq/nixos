@@ -12,6 +12,7 @@ in
 {
   imports = [
    ./hardware-configuration.nix
+   ./containers
   ] ++ systemModules;
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -75,6 +76,8 @@ in
     hashedPassword = "$6$Ha.YMvf.o4CGhhkO$NgdLisytbvuIJdo/wE0R/r6MVedXOWFAnjkgUZ9GzEzJaVqXReXsRtIByGRRKob/h6yQ.9WF/UKtmuT2JvKZp1";
     shell = pkgs.fish;
     description = "Emily 🌺🐚";
+    subUidRanges = [{ startUid = 100000; count = 65536; }];
+    subGidRanges = [{ startGid = 100000; count = 65536; }];
   };
   home-manager.backupFileExtension = "backup";
   home-manager.users.emily = import ./home.nix;
@@ -86,6 +89,7 @@ in
       "/var/lib/nix"
       "/var/lib/nixos"
       "/var/lib/systemd"
+      "/var/lib/containers"
       "/var/lib/AccountsService"
       "/home/emily"
     ];
@@ -111,5 +115,19 @@ in
     '';
   };
   
+  services.tailscale.enable = true;
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+  
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
+  
+  systemd.tmpfiles.rules = let username = "emily"; in [
+    "f+ /var/lib/AccountsService/users/${username} 0600 root root - [User]\nIcon=/var/lib/AccountsService/icons/${username}\n"
+    "L+ /var/lib/AccountsService/icons/${username} - - - - ${./avatar.png}"
+  ];
+
   system.stateVersion = "26.05";
 }

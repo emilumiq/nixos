@@ -8,6 +8,6 @@
   	celluloid
   	telegram-desktop
   ]) ++ [
-  	inputs.helium.packages.${pkgs.system}.default
+  	inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

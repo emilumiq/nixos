@@ -20,6 +20,8 @@ in
     enable = true;
     interactiveShellInit = ''
       set -g fish_greeting ""
+      set -e SSH_ASKPASS
+      set -e GIT_ASKPASS
     '';
   };
   
@@ -45,6 +47,7 @@ in
   dconf.settings = {
     "org/gnome/shell" = {
       disable-user-extensions = false;
+      disable-extension-version-validation = true;
       enabled-extensions = [
         "appindicatorsupport@rgcjonas.gmail.com"
         "just-perfection-desktop@just-perfection"
