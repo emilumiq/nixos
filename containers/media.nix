@@ -1,5 +1,11 @@
 { pkgs, config, ... }:
 
+let
+  dataDep = {
+    after = [ "home-emily-data.mount" ];
+    requires = [ "home-emily-data.mount" ];
+  };
+in
 {
   virtualisation.oci-containers.containers = {
     jellyfin = {
@@ -90,5 +96,13 @@
         TZ = "Europe/Chisinau";
       };
     };
+  };
+
+  systemd.services = {
+    podman-jellyfin = dataDep;
+    podman-qbittorrent = dataDep;
+    podman-jackett = dataDep;
+    podman-radarr = dataDep;
+    podman-sonarr = dataDep;
   };
 }

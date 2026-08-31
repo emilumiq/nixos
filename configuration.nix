@@ -91,6 +91,7 @@ in
       "/var/lib/systemd"
       "/var/lib/containers"
       "/var/lib/AccountsService"
+      "/var/lib/tailscale"
       "/home/emily"
     ];
   };
@@ -125,7 +126,7 @@ in
   };
   
   systemd.tmpfiles.rules = let username = "emily"; in [
-    "f+ /var/lib/AccountsService/users/${username} 0600 root root - [User]\nIcon=/var/lib/AccountsService/icons/${username}\n"
+    "f /var/lib/AccountsService/users/${username} 0600 root root - [User]\nIcon=/var/lib/AccountsService/icons/${username}\n"
     "L+ /var/lib/AccountsService/icons/${username} - - - - ${./avatar.png}"
   ];
 
