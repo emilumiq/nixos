@@ -124,11 +124,6 @@ in
     dockerCompat = true;
     defaultNetwork.settings.dns_enabled = true;
   };
-  
-  systemd.tmpfiles.rules = let username = "emily"; in [
-    "f /var/lib/AccountsService/users/${username} 0600 root root - [User]\nIcon=/var/lib/AccountsService/icons/${username}\n"
-    "L+ /var/lib/AccountsService/icons/${username} - - - - ${./avatar.png}"
-  ];
 
   system.stateVersion = "26.05";
 }

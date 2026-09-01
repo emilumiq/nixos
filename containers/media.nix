@@ -16,8 +16,8 @@ in
         "--device=/dev/dri:/dev/dri"
       ];
       volumes = [
-        "/home/emily/containers/jellyfin:/config"
-        "/home/emily/data/Media:/media"
+        "$HOME/containers/jellyfin:/config"
+        "$HOME/data/Media:/media"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -35,8 +35,8 @@ in
         "6881:6881/udp"
       ];
       volumes = [
-        "/home/emily/containers/qbittorrent:/config"
-        "/home/emily/data/Download:/downloads"
+        "$HOME/containers/qbittorrent:/config"
+        "$HOME/data/Download:/downloads"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -52,8 +52,8 @@ in
       autoStart = true;
       ports = [ "9117:9117" ];
       volumes = [
-        "/home/emily/containers/jackett:/config"
-        "/home/emily/data/Download:/downloads"
+        "$HOME/containers/jackett:/config"
+        "$HOME/data/Download:/downloads"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -74,9 +74,9 @@ in
       autoStart = true;
       ports = [ "7878:7878" ];
       volumes = [
-        "/home/emily/containers/radarr:/config"
-        "/home/emily/data/Download:/downloads"
-        "/home/emily/data/Media:/media"
+        "$HOME/containers/radarr:/config"
+        "$HOME/data/Download:/downloads"
+        "$HOME/data/Media:/media"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -88,11 +88,25 @@ in
       autoStart = true;
       ports = [ "8989:8989" ];
       volumes = [
-        "/home/emily/containers/sonarr:/config"
-        "/home/emily/data/Download:/downloads"
-        "/home/emily/data/Media:/media"
+        "$HOME/containers/sonarr:/config"
+        "$HOME/data/Download:/downloads"
+        "$HOME/data/Media:/media"
       ];
       environment = {
+        TZ = "Europe/Chisinau";
+      };
+    };
+
+    anibridge = {
+      image = "ghcr.io/anibridge/anibridge:latest";
+      autoStart = true;
+      ports = [ "4848:4848" ];
+      volumes = [
+        "$HOME/containers/anibridge:/config"
+      ];
+      environment = {
+        PUID = "1000";
+        PGID = "100";
         TZ = "Europe/Chisinau";
       };
     };
@@ -104,5 +118,6 @@ in
     podman-jackett = dataDep;
     podman-radarr = dataDep;
     podman-sonarr = dataDep;
+    podman-anibridge = dataDep;
   };
 }
