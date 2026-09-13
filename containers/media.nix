@@ -1,6 +1,7 @@
 { pkgs, config, ... }:
 
 let
+  userHome = config.users.users.emily.home;
   dataDep = {
     after = [ "home-emily-data.mount" ];
     requires = [ "home-emily-data.mount" ];
@@ -16,8 +17,8 @@ in
         "--device=/dev/dri:/dev/dri"
       ];
       volumes = [
-        "$HOME/containers/jellyfin:/config"
-        "$HOME/data/Media:/media"
+        "${userHome}/containers/jellyfin:/config"
+        "${userHome}/data/Media:/media"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -35,8 +36,8 @@ in
         "6881:6881/udp"
       ];
       volumes = [
-        "$HOME/containers/qbittorrent:/config"
-        "$HOME/data/Download:/downloads"
+        "${userHome}/containers/qbittorrent:/config"
+        "${userHome}/data/Download:/downloads"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -52,8 +53,8 @@ in
       autoStart = true;
       ports = [ "9117:9117" ];
       volumes = [
-        "$HOME/containers/jackett:/config"
-        "$HOME/data/Download:/downloads"
+        "${userHome}/containers/jackett:/config"
+        "${userHome}/data/Download:/downloads"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -74,9 +75,9 @@ in
       autoStart = true;
       ports = [ "7878:7878" ];
       volumes = [
-        "$HOME/containers/radarr:/config"
-        "$HOME/data/Download:/downloads"
-        "$HOME/data/Media:/media"
+        "${userHome}/containers/radarr:/config"
+        "${userHome}/data/Download:/downloads"
+        "${userHome}/data/Media:/media"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -88,9 +89,9 @@ in
       autoStart = true;
       ports = [ "8989:8989" ];
       volumes = [
-        "$HOME/containers/sonarr:/config"
-        "$HOME/data/Download:/downloads"
-        "$HOME/data/Media:/media"
+        "${userHome}/containers/sonarr:/config"
+        "${userHome}/data/Download:/downloads"
+        "${userHome}/data/Media:/media"
       ];
       environment = {
         TZ = "Europe/Chisinau";
@@ -102,12 +103,26 @@ in
       autoStart = true;
       ports = [ "4848:4848" ];
       volumes = [
-        "$HOME/containers/anibridge:/config"
+        "${userHome}/containers/anibridge:/config"
       ];
       environment = {
         PUID = "1000";
         PGID = "100";
         TZ = "Europe/Chisinau";
+      };
+    };
+    
+    suwayomi = {
+      image = "ghcr.io/suwayomi/tachidesk:latest";
+      autoStart = true;
+      ports = [ "4567:4567" ];
+      volumes = [
+        "${userHome}/containers/suwayomi:/home/suwayomi/.local/share/Tachidesk"
+      ];
+      environment = {
+        TZ = "Europe/Chisinau";
+        PUID = "1000";
+        PGID = "100";
       };
     };
   };
@@ -119,5 +134,6 @@ in
     podman-radarr = dataDep;
     podman-sonarr = dataDep;
     podman-anibridge = dataDep;
+    podman-suwayomi = dataDep;
   };
 }
