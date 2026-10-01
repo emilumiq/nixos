@@ -187,17 +187,6 @@ in {
 
       label {
           monitor =
-          text = cmd[update:18000000] echo "<b>$(date +'%A, %-d %B')</b>"
-          color = rgb(197, 200, 201)
-          font_size = 64
-          font_family = JetBrainsMono Nerd Font
-          position = 0, -20
-          halign = center
-          valign = center
-      }
-
-      label {
-          monitor =
           text = cmd[update:1000] echo "$(date +"%I:%M %p")"
           color = rgb(94, 141, 135)
           font_size = 160
