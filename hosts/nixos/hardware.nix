@@ -1,0 +1,64 @@
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: {
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
+
+  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = ["kvm-amd"];
+  boot.extraModulePackages = [];
+  boot.supportedFilesystems = ["exfat"];
+
+  fileSystems."/" = {
+    device = "tmpfs";
+    fsType = "tmpfs";
+    options = ["defaults" "size=50%" "mode=0755"];
+  };
+
+  fileSystems."/home/emily/data" = {
+    device = "/dev/disk/by-uuid/6A86-F9B9";
+    fsType = "exfat";
+    options = [
+      "defaults"
+      "nofail"
+      "uid=1000"
+      "gid=100"
+      "fmask=0022"
+      "dmask=0000"
+    ];
+  };
+
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/f38e92cc-da25-497f-9ec4-527ce6111175";
+    fsType = "ext4";
+  };
+
+  fileSystems."/etc/nixos" = {
+    device = "/persist/etc/nixos";
+    fsType = "none";
+    options = ["bind"];
+  };
+
+  fileSystems."/persist" = {
+    device = "/nix/persist";
+    fsType = "none";
+    options = ["bind"];
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/12CE-A600";
+    fsType = "vfat";
+    options = ["fmask=0022" "dmask=0022"];
+  };
+
+  swapDevices = [];
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+}

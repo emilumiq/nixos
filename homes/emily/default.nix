@@ -1,12 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-let
-  dir = ./modules/home;
-  homeModules = map (name: dir + "/${name}") (builtins.attrNames (builtins.readDir dir));
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  dir = ./modules;
+  homeModules = map (name: dir + "/${name}") (
+    builtins.filter (name: lib.hasSuffix ".nix" name) (builtins.attrNames (builtins.readDir dir))
+  );
+in {
   imports = homeModules;
-  
+
   home.username = "emily";
   home.homeDirectory = "/home/emily";
 
@@ -15,7 +19,7 @@ in
     micro
     nerd-fonts.jetbrains-mono
   ];
-  
+
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -24,14 +28,14 @@ in
       set -e GIT_ASKPASS
     '';
   };
-  
+
   programs.starship = {
     enable = true;
     enableFishIntegration = true;
     settings = {
       add_newline = false;
       format = "$directory$git_branch$git_status$nodejs$python$rust$golang$nix_shell$line_break$character";
-      
+
       nix_shell = {
         symbol = "❄️ ";
         format = "via [$symbol$state]($style) ";
@@ -43,7 +47,7 @@ in
       };
     };
   };
-  
+
   dconf.settings = {
     "org/gnome/shell" = {
       disable-user-extensions = false;
@@ -54,7 +58,7 @@ in
         "clipboard-history@aayanl.tech"
       ];
     };
-    
+
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
     };
