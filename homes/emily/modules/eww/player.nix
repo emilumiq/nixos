@@ -7,7 +7,7 @@
   isNiri = osConfig.desktop.environment == "niri";
 
   playerListener = pkgs.writeShellScriptBin "player-listener" ''
-    PATH="${pkgs.lib.makeBinPath [pkgs.playerctl pkgs.coreutils pkgs.gnused pkgs.gnugrep]}:$PATH"
+    PATH="${pkgs.lib.makeBinPath [pkgs.playerctl pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.eww]}:$PATH"
     export LC_NUMERIC=C
 
     NO_TRACK='{"title": "No track", "artist": "Unknown", "cover": "", "duration": 100, "position": 0, "elapsed": "0:00", "remaining": "0:00"}'
@@ -74,8 +74,23 @@
       echo "{\"title\": \"$clean_title\", \"artist\": \"$clean_artist\", \"cover\": \"$cover_path\", \"duration\": $duration_secs, \"position\": $pos_secs, \"elapsed\": \"$(format_time $pos_secs)\", \"remaining\": \"$(format_time $((duration_secs - pos_secs)))\"}"
     }
 
+    last_state=""
     while true; do
-      get_player_info
+      info=$(get_player_info)
+      echo "$info"
+      if echo "$info" | grep -q '"No track"'; then
+        cur="idle"
+      else
+        cur="playing"
+      fi
+      if [ "$cur" != "$last_state" ]; then
+        last_state="$cur"
+        if [ "$cur" = "playing" ]; then
+          timeout 2 eww open player >/dev/null 2>&1 || true
+        else
+          timeout 2 eww close player >/dev/null 2>&1 || true
+        fi
+      fi
       sleep 1
     done
   '';

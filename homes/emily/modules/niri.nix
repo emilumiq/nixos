@@ -23,7 +23,7 @@
 in {
   config = lib.mkIf isNiri {
     home.packages = with pkgs; [jq hyprlock hyprlockAvatar];
-    xdg.configFile."wlogout/layout".text = builtins.toJSON [
+    xdg.configFile."wlogout/layout".text = lib.concatMapStringsSep "\n" (x: builtins.toJSON x) [
       {
         label = "lock";
         action = "hyprlock-avatar";

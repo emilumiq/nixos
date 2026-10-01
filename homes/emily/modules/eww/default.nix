@@ -12,8 +12,6 @@
       timeout 3 eww active-windows >/dev/null 2>&1 && break
       sleep 1
     done
-    timeout 5 eww open player >/dev/null 2>&1
-    timeout 5 eww open notifs >/dev/null 2>&1
   '';
 
   svcPath = lib.makeBinPath ([
