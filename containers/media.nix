@@ -31,13 +31,13 @@ in {
     qbittorrent = {
       image = "lscr.io/linuxserver/qbittorrent:latest";
       autoStart = true;
-      ports = [
-        "8080:8080"
-        "6881:6881"
-        "6881:6881/udp"
+      dependsOn = ["gluetun"];
+      extraOptions = [
+        "--network=container:gluetun"
       ];
       volumes = [
         "${userHome}/containers/qbittorrent:/config"
+        "${userHome}/containers/qbittorrent/incomplete:/incomplete"
         "${userHome}/data/Download:/downloads"
       ];
       environment = {
@@ -46,6 +46,21 @@ in {
         PUID = "1000";
         PGID = "100";
         DOCKER_MODS = "ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest";
+      };
+    };
+
+    gluetun = {
+      image = "ghcr.io/qdm12/gluetun:latest";
+      autoStart = true;
+      ports = ["8080:8080"];
+      extraOptions = [
+        "--cap-add=NET_ADMIN"
+      ];
+      environmentFiles = [
+        "${userHome}/containers/gluetun.env"
+      ];
+      environment = {
+        TZ = "Europe/Chisinau";
       };
     };
 
@@ -131,6 +146,7 @@ in {
   systemd.services = {
     podman-jellyfin = dataDep;
     podman-qbittorrent = dataDep;
+    podman-gluetun = dataDep;
     podman-jackett = dataDep;
     podman-radarr = dataDep;
     podman-sonarr = dataDep;

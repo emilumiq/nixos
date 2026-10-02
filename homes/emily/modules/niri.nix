@@ -277,8 +277,6 @@ in {
       };
       Install.WantedBy = ["graphical-session.target"];
     };
-    # Стабильный путь: store-хэш исходника меняется при каждом свитче,
-    # старый путь вычищается GC и swaybg остаётся с чёрным экраном.
     xdg.configFile."wallpaper/current".source = lib.mkIf (wallpaper != null) osConfig.desktop.wallpaper;
   };
 }
