@@ -271,11 +271,14 @@ in {
         After = ["graphical-session.target"];
       };
       Service = {
-        ExecStart = "${pkgs.swaybg}/bin/swaybg -i ${wallpaper} -m fill";
+        ExecStart = "${pkgs.swaybg}/bin/swaybg -i %h/.config/wallpaper/current -m fill";
         Restart = "on-failure";
         RestartSec = 2;
       };
       Install.WantedBy = ["graphical-session.target"];
     };
+    # Стабильный путь: store-хэш исходника меняется при каждом свитче,
+    # старый путь вычищается GC и swaybg остаётся с чёрным экраном.
+    xdg.configFile."wallpaper/current".source = lib.mkIf (wallpaper != null) osConfig.desktop.wallpaper;
   };
 }

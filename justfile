@@ -1,6 +1,6 @@
 switch:
 	nh os switch .
-	systemctl --user restart eww.service eww-windows.service eww-notif.service waybar.service || true
+	systemctl --user restart eww.service eww-windows.service eww-notif.service waybar.service swaybg.service || true
 
 boot:
 	nh os boot .

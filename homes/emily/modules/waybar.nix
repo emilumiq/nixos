@@ -70,8 +70,8 @@
     pkgs.jq
     pkgs.bluez
     pkgs.wlogout
+    pkgs.overskride
     pkgs.gnome-control-center
-    pkgs.bluez
     pkgs.coreutils
     pkgs.gnused
     pkgs.gnugrep
