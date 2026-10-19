@@ -7,6 +7,7 @@
     ../../modules/system/users.nix
     ../../modules/system/persistence.nix
     ../../modules/system/networking.nix
+    ../../modules/system/hidify.nix
     ../../modules/system/keyd.nix
     ../../modules/system/sound.nix
     ../../modules/desktop

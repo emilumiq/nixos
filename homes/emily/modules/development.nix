@@ -6,6 +6,7 @@
   home.packages = with pkgs; [
     opencode
     vscode-fhs
+    android-studio
   ];
 
   programs.git = {

@@ -8,6 +8,7 @@
       gnome-text-editor
       loupe
       celluloid
+      steam-run
       telegram-desktop
     ])
     ++ [
