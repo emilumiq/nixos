@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.btfix</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/sh</string>
+        <string>-c</string>
+        <string>for i in $(seq 1 60); do /usr/local/bin/set-nvram-btfix; sleep 3; done; killall -9 bluetoothd 2>/dev/null; sleep 5; /usr/local/bin/set-nvram-btfix</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>StandardOutPath</key>
+    <string>/tmp/btfix.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/btfix.log</string>
+</dict>
+</plist>
